@@ -18,8 +18,9 @@ retrievePosition(function(pos) {
   geoDataElem.fadeIn()
 
   getLegislators(pos, function(congress) {
+    // TODO: cache people
     console.dir('showing congress data')
-    congressSeniorSenator.text('Your senior senator is ' + congress.senior_senator.fullname)
+    congressSeniorSenator.text('Your senior senator is ' + congress.senior_senator.fullname + ' and the bioguide id is ' +  congress.senior_senator.bioguide_id)
     congressJuniorSenator.text('Your junior senator is ' + congress.junior_senator.fullname)
     congressRepresantive.text('Your representative is ' + congress.representative.fullname)
     
@@ -39,13 +40,13 @@ function retrievePosition(callback) {
   else {
     console.dir('getting geodata')
     geo.getCurrentPosition(function(position) {
-      var la = position.coords.latitude
-        , lo = position.coords.longitude
+      var latitude = position.coords.latitude
+        , longitude = position.coords.longitude
       
-      store.setItem('position', (la + ',' + lo))
+      store.setItem('position', (latitude + ',' + longitude))
       return callback({
-        latitude: la,
-        longitude: lo
+        latitude: latitude,
+        longitude: longitude
       })
     })
   }
