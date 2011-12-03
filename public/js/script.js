@@ -20,9 +20,14 @@ retrievePosition(function(pos) {
   getLegislators(pos, function(congress) {
     // TODO: cache people
     console.dir('showing congress data')
-    congressSeniorSenator.text('Your senior senator is ' + congress.senior_senator.fullname + ' and the bioguide id is ' +  congress.senior_senator.bioguide_id)
-    congressJuniorSenator.text('Your junior senator is ' + congress.junior_senator.fullname)
-    congressRepresantive.text('Your representative is ' + congress.representative.fullname)
+    
+    congress.senior_senator.role = 'Senior Senator'
+    congress.junior_senator.role = 'Junior Senator'
+    congress.representative.role = 'Representative'
+    
+    makeFrontend(congress.senior_senator)
+    makeFrontend(congress.junior_senator)
+    makeFrontend(congress.representative)
     
     congressElem.fadeIn()
   })
@@ -50,6 +55,19 @@ function retrievePosition(callback) {
       })
     })
   }
+}
+
+function makeFrontend(person) {
+  // base.find('.fullname').text(person.fullname)
+  // base.find('.party').text(person.bio.current_party)
+  // base.find('.url').text(person.bio.url)
+  // base.find('.twitter').text(person.bio.twitter)
+  // base.find('.phone').text(person.phone)
+  // base.find('.address').text(person.address)
+  // base.find('.terms-served').text(person.bio.roles.length)
+  person.party = person.bio.current_party
+  
+  congressElem.append(ich.congressperson(person))
 }
 
 function getLegislators(pos, callback) {

@@ -18,7 +18,7 @@ class OpenTimes
         if BIOS[member_id].nil?
           p "getting bio for #{member_id}"
           resp = HTTParty.get(self::URL_TEMPLATE % [member_id,])
-          bio = JSON.parse(resp.body)
+          bio = JSON.parse(resp.body)['results'][0]
           BIOS[member_id] = bio
         else
           p "using memoized version of #{member_id}"

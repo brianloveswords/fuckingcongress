@@ -22,7 +22,6 @@ def getCongress(latitude, longitude)
   }
 end
 
-
 def personToHash(person)
   { :bioguide_id => person.bioguide_id,
     :firstname => person.firstname,
@@ -34,6 +33,11 @@ def personToHash(person)
   }
 end
 
+get '/' do
+  erb :index
+end
+
+
 get '/congress' do
   latitude = params[:latitude]
   longitude = params[:longitude]
@@ -41,13 +45,13 @@ get '/congress' do
   coords = "#{latitude},#{longitude}"
   if CONGRESS_MEMO[coords].nil?
     p "memoizing?!"
-    congress = getCongress(latitude, longitude)
+    CONGRESS_MEMO[coords] = getCongress(latitude, longitude)
   else
     p "using memo"
-    congress = CONGRESS_MEMO[coords]
+    CONGRESS_MEMO[coords]
   end
   
-  JSON.dump(congress)
+  JSON.dump(CONGRESS_MEMO[coords])
 end
 
 get '/member' do
