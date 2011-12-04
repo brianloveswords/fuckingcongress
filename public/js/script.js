@@ -6,6 +6,7 @@ var store = localStorage
   , geoDataElem = $('#geodata')
   , geoLong = geoDataElem.find('.long')
   , geoLat = geoDataElem.find('.lat')
+  , geoZipCode = $('#zipcode')
 
   , congressElem = $('#congress')
   , congressSeniorSenator = congressElem.find('.senior_senator')
@@ -13,13 +14,21 @@ var store = localStorage
   , congressRepresantive = congressElem.find('.representative')
 
 retrievePosition(function(pos) {
-  geoLat.text(pos.latitude)
-  geoLong.text(pos.longitude)
-  geoDataElem.fadeIn()
+  // geoLat.text(pos.latitude)
+  // geoLong.text(pos.longitude)
+  // geoDataElem.fadeIn()
 
   getLegislators(pos, function(congress) {
+    getZip(pos, function(zip) {
+      var geoinfo = ich.geoinfo({latitude: pos.latitude, longitude: pos.longitude, zipcode: zip })
+      geoZipCode.text(zip)
+      geoZipCode.attr('title', pos.latitude + ',' + pos.longitude)
+    })
+
     // TODO: cache people
     console.dir('showing congress data')
+    
+    console.dir(congress)
     
     congress.senior_senator.role = 'Senior Senator'
     congress.junior_senator.role = 'Junior Senator'
@@ -58,17 +67,26 @@ function retrievePosition(callback) {
 }
 
 function makeFrontend(person) {
-  // base.find('.fullname').text(person.fullname)
-  // base.find('.party').text(person.bio.current_party)
-  // base.find('.url').text(person.bio.url)
-  // base.find('.twitter').text(person.bio.twitter)
-  // base.find('.phone').text(person.phone)
-  // base.find('.address').text(person.address)
-  // base.find('.terms-served').text(person.bio.roles.length)
-  person.party = person.bio.current_party
-  
+  person.initial = person.lastname[0]
+  person.bio.terms_served = person.bio.roles.length
+  person.bio.office_address = person.congress_office
+  person.bio.on_committees = person.bio.roles[0].committees.length
+  person.bio.committees = person.bio.roles[0].committees
   congressElem.append(ich.congressperson(person))
+  console.dir(person)
 }
+
+function getZip(pos, callback) {
+  var url = ''
+  url += '/zip'
+  url += '?latitude=' + pos.latitude
+  url += '&longitude=' + pos.longitude
+  
+  jQuery.get(url, function(data) {
+    callback(data)
+  }, 'json')
+}
+
 
 function getLegislators(pos, callback) {
   var url = ''

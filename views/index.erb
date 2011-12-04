@@ -45,14 +45,15 @@
       
       <a id='recalculate' href='#'>recalculate</a>
       
-      <div id='geodata'>
-        <h1>Geocoordinates</h1>
-        <h2 class='lat'>Latitude</h2>
-        <h2 class='long'>Longitude</h2>
-      </div>
+      <ul id='geodata'>
+        <li><h1>Geodata</h1></li>
+      </ul>
     
       <ul id='congress'>
-        <h1>Your Congress Members</h1>
+        <li>
+          <h1>This is who's responsible for the shit happening around you</h1>
+          <h2>(at least
+        </li>
       </ul>
     
     </div>
@@ -63,14 +64,39 @@
 
   <!-- templates -->
   <script type='text/html' id='congressperson'>
-    <li>
+    <li class='congressp'>
+      <img src='http://bioguide.congress.gov/bioguide/photo/{{ initial }}/{{ bioguide_id }}.jpg' />
       <h2>
         <span class='name'>{{ fullname }}</span>
-        <span class='role'>({{ role }}, {{ party }})</span>
+        <span class='role'>({{ role }}, {{#bio}}{{ current_party }}{{/bio}})</span>
       </h2>
+      {{#bio}}
+      <ul class='info'>
+        <li><strong>Terms Served:</strong> {{ terms_served }}</li>
+        <li><strong>URL:</strong> <a href="{{url}}">{{url}}</a> </li>
+        {{#twitter_id}}<li><strong>Twitter:</strong> <a href="http://twitter.com/{{twitter_id}}" target="_blank">@{{ twitter_id }}</a> </li> {{/twitter_id}}
+        <li><strong>Phone:</strong> {{phone}}</li>
+        <li><strong>Office Address:</strong> {{office_address}}</li>
+        
+        {{#on_committees}}
+        <li>
+          <strong>Committees: </strong>
+          <ul>{{#committees}}<li>{{name}}</li>{{/committees}}</ul>
+        </li>
+        {{/on_committees}}
+      
+      </ul>
+      {{/bio}}
+      <br style='clear: both;'>
     </li>
   </script>
 
+  <script type='text/html' id='geoinfo'>
+    <li><strong>Latitude: </strong> {{ latitude }}</li>
+    <li><strong>Longitude: </strong> {{ longitude }}</li>
+    <li><strong>Zip Code: </strong> {{ zipcode }} </li>
+  </script>
+  
   <!-- JavaScript at the bottom for fast page loading -->
 
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->

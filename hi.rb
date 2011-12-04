@@ -3,6 +3,7 @@ require 'sunlight'
 require 'json'
 
 require "nyt.rb"
+require "gmaps.rb"
 
 configure do
   set :port, 2900
@@ -37,6 +38,11 @@ get '/' do
   erb :index
 end
 
+get '/zip' do
+  latitude = params[:latitude]
+  longitude = params[:longitude]
+  GMaps.get_zip(latitude, longitude)
+end
 
 get '/congress' do
   latitude = params[:latitude]
