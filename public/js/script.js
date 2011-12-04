@@ -3,9 +3,8 @@
 */
 var store = localStorage
   , geo = navigator.geolocation
-  , geoDataElem = $('#geodata')
-  , geoLong = geoDataElem.find('.long')
-  , geoLat = geoDataElem.find('.lat')
+  , geoLong = $('#long')
+  , geoLat = $('#lat')
   , geoZipCode = $('#zipcode')
 
   , congressElem = $('#congress')
@@ -13,21 +12,15 @@ var store = localStorage
   , congressJuniorSenator = congressElem.find('.junior_senator')
   , congressRepresantive = congressElem.find('.representative')
 
+  , parties = { 'D' : 'Democrat', 'R': 'Republican', 'I': 'Independant' }
+
 retrievePosition(function(pos) {
-  // geoLat.text(pos.latitude)
-  // geoLong.text(pos.longitude)
-  // geoDataElem.fadeIn()
+  geoLat.text(pos.latitude)
+  geoLong.text(pos.longitude)
 
   getLegislators(pos, function(congress) {
-    getZip(pos, function(zip) {
-      var geoinfo = ich.geoinfo({latitude: pos.latitude, longitude: pos.longitude, zipcode: zip })
-      geoZipCode.text(zip)
-      geoZipCode.attr('title', pos.latitude + ',' + pos.longitude)
-    })
-
     // TODO: cache people
     console.dir('showing congress data')
-    
     console.dir(congress)
     
     congress.senior_senator.role = 'Senior Senator'
@@ -42,13 +35,15 @@ retrievePosition(function(pos) {
   })
 })
 
+
 function retrievePosition(callback) {
-  var cachedPosition = store.getItem('position').split(',')
+  var cachedPosition = store.getItem('position'), pos;
   if (cachedPosition) {
      console.dir('pulling from cache')
+     pos = cachedPosition.split(',')
      return callback({
-       latitude: cachedPosition[0],
-       longitude: cachedPosition[1]
+       latitude: pos[0],
+       longitude: pos[1]
      })
   }
   else {
@@ -68,10 +63,12 @@ function retrievePosition(callback) {
 
 function makeFrontend(person) {
   person.initial = person.lastname[0]
+  
   person.bio.terms_served = person.bio.roles.length
   person.bio.office_address = person.congress_office
   person.bio.on_committees = person.bio.roles[0].committees.length
   person.bio.committees = person.bio.roles[0].committees
+  person.bio.full_party = parties[person.bio.current_party]
   congressElem.append(ich.congressperson(person))
   console.dir(person)
 }

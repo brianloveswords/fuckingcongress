@@ -1,12 +1,40 @@
+body {
+  background: #fff;
+  color: #333;
+  font-size: 110%;
+}
+
 #geodata,#congress { display: none; }
+
 #recalculate { display: block; text-align: right; }
-.congressp img { float: left; margin: 0 25px 0;}
+
+.congressp img {
+  float: left;
+  margin: 0 25px 0 0;
+}
+
 .congressp {
   display: inline-block;
   width: 550px;
   clear: both;
-  margin: 15px 0;
-  border: 1px solid black;
+  margin: 15px 10px;
+  padding: 15px 8px 15px 15px;
+  border: 2px solid #ddd;
+  background: #fff;
+  border-radius: 9px;
+  background: #f3f3f3;
 }
  
-ul { list-style: none; }
+.congressp h3, .congressp h2 {
+  margin: 0;
+  padding: 0;
+}
+
+.congressp.Democrat h2 {
+  color: #47a;
+  text-shadow: 1px 1px 1px #eee;
+}
+
+ul {
+  list-style: none;
+}

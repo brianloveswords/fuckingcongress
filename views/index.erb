@@ -44,15 +44,10 @@
     <div id="main" role="main">
       
       <a id='recalculate' href='#'>recalculate</a>
-      
-      <ul id='geodata'>
-        <li><h1>Geodata</h1></li>
-      </ul>
-    
       <ul id='congress'>
         <li>
           <h1>This is who's responsible for the shit happening around you</h1>
-          <h2>(at least
+          <h2>(somewhere around <span id='lat'></span>,<span id='long'></span>)</h2>
         </li>
       </ul>
     
@@ -64,12 +59,11 @@
 
   <!-- templates -->
   <script type='text/html' id='congressperson'>
-    <li class='congressp'>
+    <li class='congressp {{#bio}}{{full_party}}{{/bio}}'>
       <img src='http://bioguide.congress.gov/bioguide/photo/{{ initial }}/{{ bioguide_id }}.jpg' />
-      <h2>
-        <span class='name'>{{ fullname }}</span>
-        <span class='role'>({{ role }}, {{#bio}}{{ current_party }}{{/bio}})</span>
-      </h2>
+      <h2 class='name'>{{ fullname }}</h2>
+      <h3 class='role'>{{ role }}, {{#bio}}{{ full_party }}{{/bio}}</h3>
+      
       {{#bio}}
       <ul class='info'>
         <li><strong>Terms Served:</strong> {{ terms_served }}</li>
